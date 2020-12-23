@@ -1,10 +1,32 @@
 <?php 
 
+$errors = [];
+require_once("config.php");
+
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = $_POST['username'];
   $password = $_POST['password'];
-}
+  
+  $sql = "select id, password FROM users WHERE username = '$username'";
+  $result = mysqli_query($con, $sql);
 
+  if (mysqli_num_rows($result) == 1) {
+    while( $data = mysqli_fetch_array($result) ) {
+      $hashed_password = $data['password'];
+      $id = $data['id'];
+      if(password_verify($password, $hashed_password)) {
+        session_start();
+        $_SESSION['username'] = $username;
+        $_SESSION['id'] = $id;
+        header("location: dashboard.php");
+      } else {
+        array_push($errors, 'Password Invalid');
+      }
+    }
+  } else {
+    array_push($errors, 'User not found');
+  }
+}
 ?>
 
 
@@ -21,6 +43,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="min-h-screen text-white flex items-center justify-center">
     <div class="max-w-md bg-blue-600 p-8 rounded shadow-lg w-full mx-auto">
       <h3 class="font-bold text-3xl mb-8"> Login </h3>
+
+      <?php if (count($errors) > 0) : ?>
+        <ul class="list-disc ml-10 mb-8">
+          <?php
+            for ($i = 0; $i < count($errors); ++$i) {
+              echo '<li>' . $errors[$i] . '</li>';
+            }
+          ?>
+        </ul>
+      <?php endif; ?>
+      
       <form class="text-gray-700 space-y-5" method="POST" action="login.php">
         <input class="rounded bg-white p-4 h-12 w-full focus:outline-none" type="text" name="username" placeholder="Username"> 
         <input class="rounded bg-white p-4 h-12 w-full focus:outline-none" type="text" name="password" placeholder="Password"> 
