@@ -29,7 +29,7 @@
     $description = $_POST['description'];
 
     if (empty($product_name)) array_push($errors, 'Product name is required');
-    if (empty($_POST['stock'])) array_push($errors, 'Product Stock is required');
+    if (strlen($_POST['stock']) == 0) array_push($errors, 'Product Stock is required');
     if (empty($image)) array_push($errors, 'Product Image is required');
     if (empty($price)) array_push($errors, 'Product Price is required');
     if (empty($description)) array_push($errors, 'Product Description is required');
@@ -66,7 +66,6 @@
       </div>
     </div>
   </header>
-
 
   <section class="container mx-auto px-6 mt-20 mb-20">
     <div class="grid grid-cols-2 gap-20">
