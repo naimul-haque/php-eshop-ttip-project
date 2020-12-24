@@ -51,7 +51,7 @@
     </div>
   </header>
 
-  <section class="container px-6 mx-auto mt-20">
+  <section class="container px-6 mx-auto mt-20 mb-20">
     <div class="grid grid-cols-3 gap-20">
       <?php if (mysqli_num_rows($result) > 0): 
           while( $data = mysqli_fetch_array($result) ) : ?>

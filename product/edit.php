@@ -88,7 +88,7 @@
   </header>
 
 
-  <section class="container mx-auto px-6 mt-20">
+  <section class="container mx-auto px-6 mt-20 mb-20">
     <div class="grid grid-cols-2 gap-20">
       <div>
         <h3 class="text-3xl font-semibold mb-8">Edit product</h3>
@@ -113,6 +113,12 @@
       </div>
     </div>
   </section>
+
+  <footer class="bg-gray-900 py-8 text-white">
+    <div class="contatiner mx-auto px-6 text-center">
+      <p>Developed by Naimul Haque. <a class="border-b" href="https://github.com/naimul-haque/php-eshop-ttip-project"> Github Repo </a> </p>
+    </div>
+  </footer>
 
 </body>
 </html>

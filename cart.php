@@ -102,7 +102,6 @@
             <td class="px-6 py-3">  </td>
             <td class="px-6 py-3"> ৳ <?php echo $total_price; ?> </td>
           </tr>
-
         </tbody>
       </table>
     </div>

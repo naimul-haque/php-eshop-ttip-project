@@ -47,7 +47,7 @@
     </div>
   </header>
 
-  <section class="mt-20 container px-6 mx-auto">
+  <section class="mt-20 mb-20 container px-6 mx-auto">
 
     <div class="mb-10">
       <a href="product/add.php" class="inline-block rounded bg-green-500 text-white px-4 py-2"> Add Product </a>
@@ -89,6 +89,11 @@
     </div>
   </section>
 
+  <footer class="bg-gray-900 py-8 text-white">
+    <div class="contatiner mx-auto px-6 text-center">
+      <p>Developed by Naimul Haque. <a class="border-b" href="https://github.com/naimul-haque/php-eshop-ttip-project"> Github Repo </a> </p>
+    </div>
+  </footer>
 </body>
 
 </html>
