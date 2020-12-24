@@ -20,7 +20,16 @@
     }
   }
 
-  $result = mysqli_query($con, "select * from products where owner = $user_id ORDER BY id DESC");
+  // get current cart
+  $cart;
+  $result = mysqli_query($con, "select cart from users where id=$user_id");
+  if (mysqli_num_rows($result) > 0) {
+    while( $data = mysqli_fetch_array($result) ) {
+      $cart = $data['cart'];
+    }
+  }
+  require_once("cart_functions.php");
+  $list = getCartItems($cart);
 ?>
 
 <!DOCTYPE html>
@@ -50,39 +59,49 @@
   <section class="mt-20 container px-6 mx-auto">
 
     <div class="mb-10">
-      <a href="product/add.php" class="inline-block rounded bg-green-500 text-white px-4 py-2"> Add Product </a>
+      <h3 class="text-3xl font-bold">Cart</h3>
     </div>
 
-    <div class="border rounded border-gray-200">
+    <div class="border-t border-l border-r rounded border-gray-200">
       <table class="table-auto w-full">
-        <thead class="border-b border-gray  -200">
+        <thead class="border-b border-gray-200">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Image</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Price</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Stock</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Description</th>
           </tr>
         </thead>
         <tbody>
 
-        <?php  if (mysqli_num_rows($result) > 0): 
-          while( $data = mysqli_fetch_array($result) ) : ?>
-            <tr class="text-left text-xl font-medium text-gray-900">
-              <td class="px-6 py-3"> 
-                <p> <?php echo $data['name']; ?>  </p>
-                <div class="text-sm space-x-4 mt-4">
-                  <a href="product/delete.php?id=<?php echo $data['id']; ?>" class="inline-block rounded bg-red-500 text-white px-4 py-2"> Delete Product </a>
-                  <a href="product/edit.php?id=<?php echo $data['id']; ?>" class="inline-block rounded bg-blue-500 text-white px-4 py-2"> Edit Product </a>
-                </div>
-              </td>
-              <td class="px-6 py-3"> <img class="h-32" src="<?php echo $data['image']; ?>"> </td>
-              <td class="px-6 py-3"> <?php echo $data['price']; ?> </td>
-              <td class="px-6 py-3"> <?php echo $data['stock']; ?> </td>
-              <td class="px-6 py-3"> <?php echo $data['description']; ?> </td>
-            </tr>
-            <?php endwhile; ?>
-          <?php endif; ?>
+        <?php $total_price = 0; ?>
+        <?php for ($i = 0; $i < count($list); ++$i): ?>
+          <?php 
+            $product_id = $list[$i];
+            $sql = "select * from products where id=$product_id"; 
+            $result = mysqli_query($con, $sql);
+          ?>
+          <?php  if (mysqli_num_rows($result) > 0): 
+            while( $data = mysqli_fetch_array($result) ) : ?>
+             <?php 
+              $price = $data['price'];
+              $total_price = $total_price + $price;
+             ?>
+              <tr class="text-left text-xl font-medium text-gray-900 border-b border-gray-200">
+                <td class="px-6 py-3"> 
+                  <p> <?php echo $data['name']; ?>  </p>
+                </td>
+                <td class="px-6 py-3"> <img class="h-32" src="<?php echo $data['image']; ?>"> </td>
+                <td class="px-6 py-3"> ৳ <?php echo $price; ?> </td>
+              </tr>
+              <?php endwhile; ?>
+            <?php endif; ?>
+          <?php endfor; ?>
+
+          <tr class="text-left text-xl font-medium text-gray-900 border-b border-gray-200">
+            <td class="px-6 py-3"> Total </td>
+            <td class="px-6 py-3">  </td>
+            <td class="px-6 py-3"> ৳ <?php echo $total_price; ?> </td>
+          </tr>
 
         </tbody>
       </table>

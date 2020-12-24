@@ -1,12 +1,19 @@
 <?php 
 
+// for tracking validation errors
 $errors = [];
 require_once("config.php");
 
+// redirect to dashboard if already logged in
+session_start();
+if (isset($_SESSION['username'])) {
+  header("location: dashboard.php");
+}
+
+// if a post request is sent in the /login route
 if($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = $_POST['username'];
   $password = $_POST['password'];
-  
   $sql = "select id, password FROM users WHERE username = '$username'";
   $result = mysqli_query($con, $sql);
 
@@ -14,6 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     while( $data = mysqli_fetch_array($result) ) {
       $hashed_password = $data['password'];
       $id = $data['id'];
+      // validate the password
       if(password_verify($password, $hashed_password)) {
         session_start();
         $_SESSION['username'] = $username;
@@ -42,7 +50,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <div class="min-h-screen text-white flex items-center justify-center">
     <div class="max-w-md bg-blue-600 p-8 rounded shadow-lg w-full mx-auto">
-      <h3 class="font-bold text-3xl mb-8"> Login </h3>
+      <h3 class="font-bold text-3xl mb-4"> Login </h3>
+      <p class="mb-8"> Don't have an account? Register <a class="border-b" href="register.php"> here </a>
 
       <?php if (count($errors) > 0) : ?>
         <ul class="list-disc ml-10 mb-8">
@@ -56,7 +65,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       
       <form class="text-gray-700 space-y-5" method="POST" action="login.php">
         <input class="rounded bg-white p-4 h-12 w-full focus:outline-none" type="text" name="username" placeholder="Username"> 
-        <input class="rounded bg-white p-4 h-12 w-full focus:outline-none" type="text" name="password" placeholder="Password"> 
+        <input class="rounded bg-white p-4 h-12 w-full focus:outline-none" type="password" name="password" placeholder="Password"> 
         <input type="submit" class="h-12 rounded bg-blue-900 w-full text-white" value="Login">
       </div>
     </div>

@@ -30,7 +30,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "insert into users(name, username, password, email, cart) values ('$name', '$username', '$hashed_password', '$email', '$cart')";
     if ( mysqli_query($con, $sql) ) {
       header("location: login.php");
-      exit();
     }
   }
 }
